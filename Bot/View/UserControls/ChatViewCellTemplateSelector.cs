@@ -1,6 +1,6 @@
 ﻿using System;
+using Bot.Models;
 using Xamarin.Forms;
-using static Bot.ViewModel.MainVM;
 
 namespace Bot.View.UserControls
 {

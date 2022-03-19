@@ -77,26 +77,5 @@ namespace Bot.ViewModel
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        public class ChatMessage
-        {
-            public string Id
-            {
-                get;
-                set;
-            }
-
-            public string Text
-            {
-                get;
-                set;
-            }
-
-            public bool IsIncoming
-            {
-                get;
-                set;
-            }
-        }
     }
 }

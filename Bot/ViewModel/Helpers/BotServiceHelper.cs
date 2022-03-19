@@ -30,10 +30,10 @@ namespace Bot.ViewModel.Helpers
         {
             string endpoint = "/v3/directline/conversations";
 
-            using(HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri("https://directline.botframework.com");
-                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Constants.BarerToken}");
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer BoKJEGd1SlE.aSssnudGFJhgBuZ7wXqyUdd8eNoDXjF2ISsm15HUlsw");
 
                 var response = await client.PostAsync(endpoint, null);
                 string json = await response.Content.ReadAsStringAsync();
@@ -51,7 +51,7 @@ namespace Bot.ViewModel.Helpers
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri("https://directline.botframework.com");
-                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Constants.BarerToken}");
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer BoKJEGd1SlE.aSssnudGFJhgBuZ7wXqyUdd8eNoDXjF2ISsm15HUlsw");
 
                 Activity activity = new Activity
                 {
@@ -92,17 +92,24 @@ namespace Bot.ViewModel.Helpers
                     do
                     {
                         result = await client.ReceiveAsync(message, cts.Token);
-                        if (result.MessageType != WebSocketMessageType.Text)
-                            break;
-                        var messageBytes = message.Skip(message.Offset).Take(result.Count).ToArray();
-                        string messageJSON = Encoding.UTF8.GetString(messageBytes);
+                        try
+                        {
+                            if (result.MessageType != WebSocketMessageType.Text)
+                                break;
+                            var messageBytes = message.Skip(message.Offset).Take(result.Count).ToArray();
+                            string messageJSON = Encoding.UTF8.GetString(messageBytes);
 
-                        BotsResponse botsResponse = JsonConvert.DeserializeObject<BotsResponse>(messageJSON);
+                            BotsResponse botsResponse = JsonConvert.DeserializeObject<BotsResponse>(messageJSON);
 
-                        var args = new BotResponseEventArgs();
-                        args.Activities = botsResponse.Activities;
+                            var args = new BotResponseEventArgs();
+                            args.Activities = botsResponse.Activities;
 
-                        MessageReceived?.Invoke(this, args);
+                            MessageReceived?.Invoke(this, args);
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
                     }
                     while (!result.EndOfMessage);
                 }
