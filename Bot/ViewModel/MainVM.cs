@@ -67,18 +67,18 @@ namespace Bot.ViewModel
             });
 
             await botService.SendMessage(Message);
+            Message = string.Empty;
         }
 
         void BotService_MessageReceived(object sender, BotResponseEventArgs e)
         {
-            foreach (var botMessage in e?.BotMessages?.Where(x => x.From != "user1") ?? new List<BotMessage>())
+            var message = e?.BotMessages?.Where(x => x.From != "user1")?.LastOrDefault();
+
+            Messages.Add(new ChatMessage
             {
-                Messages.Add(new ChatMessage
-                {
-                    Text = botMessage.Text,
-                    IsIncoming = true
-                });
-            }
+                Text = message?.Text,
+                IsIncoming = true
+            });
         }
 
         private void OnPropertyChanged(string propertyName)

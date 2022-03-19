@@ -2,7 +2,8 @@
 <ViewCell xmlns="http://xamarin.com/schemas/2014/forms" 
           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
           x:Class="Bot.View.UserControls.OutgoingViewCell">
-    <Frame BackgroundColor="#118AB2">
+    <Frame BackgroundColor="#118AB2"
+           Margin="32,8,0,8">
         <Label Text="{Binding Text}"
                TextColor="White"/>
     </Frame>
