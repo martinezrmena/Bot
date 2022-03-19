@@ -6,11 +6,13 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Bot.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Bot.ViewModel.Helpers
 {
+    [Obsolete]
     public class BotServiceHelper
     {
         public Conversation _Conversation
@@ -102,7 +104,7 @@ namespace Bot.ViewModel.Helpers
                             BotsResponse botsResponse = JsonConvert.DeserializeObject<BotsResponse>(messageJSON);
 
                             var args = new BotResponseEventArgs();
-                            args.Activities = botsResponse.Activities;
+                            //args.Activities = botsResponse.Activities;
 
                             MessageReceived?.Invoke(this, args);
                         }
@@ -116,15 +118,6 @@ namespace Bot.ViewModel.Helpers
             }, cts.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }
 
-        public class BotResponseEventArgs : EventArgs
-        {
-            public List<Activity> Activities
-            {
-                get;
-                set;
-            }
-        }
-
         public class BotsResponse
         {
             public string Watermark
@@ -134,75 +127,6 @@ namespace Bot.ViewModel.Helpers
             }
 
             public List<Activity> Activities
-            {
-                get;
-                set;
-            }
-        }
-
-        public class ChannelAccount
-        {
-            public string Id
-            {
-                get;
-                set;
-            }
-
-            public string Name
-            {
-                get;
-                set;
-            }
-        }
-
-        public class Activity
-        {
-            public ChannelAccount From
-            {
-                get;
-                set;
-            }
-
-            public string Text
-            {
-                get;
-                set;
-            }
-
-            public string Type
-            {
-                get;
-                set;
-            }
-        }
-
-        public class Conversation
-        {
-            public string ConversationId
-            {
-                get;
-                set;
-            }
-
-            public string Token
-            {
-                get;
-                set;
-            }
-
-            public string StreamUrl
-            {
-                get;
-                set;
-            }
-
-            public string ReferenceGrammarId
-            {
-                get;
-                set;
-            }
-
-            public int Expires_in
             {
                 get;
                 set;

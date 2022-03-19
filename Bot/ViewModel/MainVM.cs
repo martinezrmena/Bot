@@ -4,13 +4,17 @@ using System.ComponentModel;
 using Bot.ViewModel.Helpers;
 using Xamarin.Forms;
 using Bot.Models;
+using Bot.Services;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Bot.ViewModel
 {
     public class MainVM : INotifyPropertyChanged
     {
         #region Properties
-        BotServiceHelper botHelper;
+        BotService botService;
 
         public Command SendCommand
         {
@@ -41,35 +45,39 @@ namespace Bot.ViewModel
 
         public MainVM()
         {
-            botHelper = new BotServiceHelper();
-            SendCommand = new Command(SendActivity);
+            botService = new BotService();
+            SendCommand = new Command(async() => await SendMessage());
             Messages = new ObservableCollection<ChatMessage>();
-
-            botHelper.MessageReceived += BotHelper_MessageReceived;
+            SetConfig();
+            botService.MessageReceived += BotService_MessageReceived;
         }
 
-        void SendActivity()
+        public async void SetConfig()
+        {
+            await botService.Setup();
+        }
+
+
+        public async Task SendMessage()
         {
             Messages.Add(new ChatMessage
             {
                 Text = Message,
                 IsIncoming = false
             });
-            botHelper.SendActivity(Message);
+
+            await botService.SendMessage(Message);
         }
 
-        void BotHelper_MessageReceived(object sender, BotServiceHelper.BotResponseEventArgs e)
+        void BotService_MessageReceived(object sender, BotResponseEventArgs e)
         {
-            foreach (var activity in e.Activities)
+            foreach (var botMessage in e?.BotMessages?.Where(x => x.From != "user1") ?? new List<BotMessage>())
             {
-                if (activity.From.Id != "user1")
+                Messages.Add(new ChatMessage
                 {
-                    Messages.Add(new ChatMessage
-                    {
-                        Text = activity.Text,
-                        IsIncoming = true
-                    });
-                }
+                    Text = botMessage.Text,
+                    IsIncoming = true
+                });
             }
         }
 
