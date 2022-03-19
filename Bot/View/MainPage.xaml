@@ -3,10 +3,12 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:Bot.ViewModel"
+    xmlns:uc="clr-namespace:Bot.View.UserControls"
     x:Class="Bot.View.MainPage">
     <ContentPage.Resources>
         <ResourceDictionary>
             <vm:MainVM x:Key="vm"/>
+            <uc:ChatViewCellTemplateSelector x:Key="chatTemplateSelector"/>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
@@ -17,6 +19,11 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
+            <ListView Grid.Row="0"
+                      ItemTemplate="{StaticResource chatTemplateSelector}"
+                      ItemsSource="{Binding Messages}"
+                      HasUnevenRows="true"
+                      SeparatorVisibility="None"/>
             <StackLayout Orientation="Horizontal"
                          HorizontalOptions="FillAndExpand"
                          Grid.Row="1">
